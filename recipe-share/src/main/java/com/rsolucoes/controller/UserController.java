@@ -1,5 +1,10 @@
 package com.rsolucoes.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +19,12 @@ import lombok.AllArgsConstructor;
 public class UserController {
 	
 	private UserRepository userRepository;
+	
+	@GetMapping("/users")
+	public List<User> getAllUsers() throws Exception{
+		List<User> users = userRepository.findAll();
+		return users;
+	}
 
 	@PostMapping("/users")
 	public User createUser(@RequestBody User user) throws Exception{
@@ -28,11 +39,12 @@ public class UserController {
 		return savedUser;
 	}
 	
-//	public User findByEmail(String email) throws Exception{
-//		User user = userRepository.findByEmail(email);
-//		if (user == null) {
-//			throw new Exception("user not found whith email " + email);
-//		}
-//		return user;
-//	}
+	@DeleteMapping("/users/{id}")
+	public String deleteUser(@PathVariable Long id) throws Exception{
+		
+		userRepository.deleteById(id);
+		
+		return "User deleted successfully";
+	}
+	
 }
